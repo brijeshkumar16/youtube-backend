@@ -1,0 +1,20 @@
+{
+  "name": "youtube-backend",
+  "version": "1.0.0",
+  "description": "A youtube backend with NodeJS",
+  "main": "index.js",
+  "author": "Brijeshkumar Yadav",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "start": "node --watch src/index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^8.0.3"
+  },
+  "devDependencies": {
+    "dotenv": "^16.3.1",
+    "prettier": "3.1.1"
+  }
+}
