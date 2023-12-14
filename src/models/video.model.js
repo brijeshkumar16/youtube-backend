@@ -45,4 +45,5 @@ const videoSchema = new Schema(
 
 videoSchema.plugin(aggregatePaginate);
 
-export default Video = model('Video', videoSchema);
+const Video = model('Video', videoSchema);
+export default Video;

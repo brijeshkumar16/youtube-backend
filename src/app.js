@@ -2,6 +2,8 @@ import cookieParser from 'cookie-parser';
 import express from 'express';
 import cors from 'cors';
 
+import mediaItemRoute from './routes/media-item.route.js';
+
 const app = express();
 
 app.use(
@@ -16,8 +18,6 @@ app.use(express.urlencoded({ extended: true, limit: '16kb' }));
 app.use(express.static('public'));
 app.use(cookieParser());
 
-app.get('/', (req, res) => {
-  res.send('Hello World');
-});
+app.use(mediaItemRoute);
 
 export default app;

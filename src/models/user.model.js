@@ -26,11 +26,12 @@ const userSchema = new Schema(
       index: true,
     },
     avatar: {
-      type: String,
-      required: true,
+      type: Schema.Types.ObjectId,
+      ref: 'MediaItem',
     },
     coverImage: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: 'MediaItem',
     },
     password: {
       type: String,
@@ -90,4 +91,6 @@ userSchema.methods.generateRefreshToken = function () {
   );
 };
 
-export default User = model('User', userSchema);
+const User = model('User', userSchema);
+
+export default User;
