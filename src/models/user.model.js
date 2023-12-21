@@ -35,9 +35,8 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: [true, 'Password is required'],
     },
-    refreshToken: {
+    googleId: {
       type: String,
     },
     watchHistory: [
@@ -47,8 +46,8 @@ const userSchema = new Schema(
       },
     ],
     deletedAt: {
-      type: Boolean,
-      default: false,
+      type: Date,
+      default: null,
     },
   },
   { timestamps: true }
@@ -56,7 +55,7 @@ const userSchema = new Schema(
 
 userSchema.pre('save', async function (next) {
   if (this.isModified('password')) {
-    this.password = bcrypt.hash(this.password, 10);
+    this.password = await bcrypt.hash(this.password, 10);
     next();
   }
   next();
@@ -66,27 +65,14 @@ userSchema.methods.isPasswordCorrect = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-userSchema.methods.generateAccessToken = function () {
+userSchema.methods.generateToken = function () {
   return jwt.sign(
     {
-      _id: this._id,
-      email: this.email,
-      username: this.username,
+      id: this._id,
     },
-    process.env.ACCESS_TOKEN_SECRET,
+    process.env.TOKEN_SECRET,
     {
-      expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
-    }
-  );
-};
-userSchema.methods.generateRefreshToken = function () {
-  return jwt.sign(
-    {
-      _id: this._id,
-    },
-    process.env.REFRESH_TOKEN_SECRET,
-    {
-      expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
+      expiresIn: process.env.TOKEN_EXPIRY * 60,
     }
   );
 };

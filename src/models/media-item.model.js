@@ -14,11 +14,6 @@ const mediaItemSchema = new Schema(
       type: String,
       required: true,
     },
-    status: {
-      type: String,
-      enum: ['active', 'inactive'],
-      default: 'active',
-    },
     deletedAt: {
       type: Date,
       default: null,

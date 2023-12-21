@@ -1,10 +1,11 @@
-import express from 'express';
+import { Router } from 'express';
 
-import fileUpload from '../controllers/media-item.controllers.js';
+import fileUpload from '../controllers/media-item.controller.js';
 import upload from '../middlewares/multer.middlewares.js';
+import auth from '../middlewares/auth.middlewares.js';
 
-const mediaItemRoute = express.Router();
+const mediaItemRoute = Router();
 
-mediaItemRoute.post('/api/v1/media-item', upload.single('file'), fileUpload);
+mediaItemRoute.post('/', auth, upload.single('file'), fileUpload);
 
 export default mediaItemRoute;
