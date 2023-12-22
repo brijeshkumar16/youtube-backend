@@ -8,17 +8,14 @@ const verifyCallback = (req, resolve, reject) => async (error, user, info) => {
     return reject('Unauthorized User');
   }
 
-  let userToken = await dbService.findOne(UserToken, {
-    token: req?.headers?.authorization?.replace('Bearer ', ''),
+  const userToken = await dbService.findOne(UserToken, {
+    token: req.headers.authorization.replace('Bearer ', ''),
     userId: user._id,
     isTokenExpired: false,
     tokenExpiredTime: {
       $gt: new Date(),
     },
   });
-
-  req.user = user;
-  req.user.token = userToken;
 
   if (!userToken) {
     return reject('Token not found');
@@ -28,6 +25,8 @@ const verifyCallback = (req, resolve, reject) => async (error, user, info) => {
     return reject('Token is Expired');
   }
 
+  req.user = user;
+  req.user.token = userToken;
   resolve();
 };
 
