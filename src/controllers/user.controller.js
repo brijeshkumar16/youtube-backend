@@ -1,3 +1,4 @@
+import passport from 'passport';
 import dayjs from 'dayjs';
 
 import UserToken from '../models/user-token.model.js';
@@ -32,9 +33,9 @@ export const register = async (req, res) => {
 
     let expire = dayjs().add(process.env.TOKEN_EXPIRY, 'second').toISOString();
 
-    await dbService.create(UserToken, { token, userId: findUser._id, tokenExpiredTime: expire });
+    const createToken = await dbService.create(UserToken, { token, userId: findUser._id, tokenExpiredTime: expire });
 
-    return res.success({ data: { ...findUser._doc, token }, message: 'User create successfully' });
+    return res.success({ data: { ...findUser._doc, token: createToken }, message: 'User create successfully' });
   } catch (error) {
     return res.internalServerError({ message: error.message });
   }
@@ -62,9 +63,9 @@ export const login = async (req, res) => {
 
     let expire = dayjs().add(process.env.TOKEN_EXPIRY, 'second').toISOString();
 
-    await dbService.create(UserToken, { token, userId: find._id, tokenExpiredTime: expire });
+    const createToken = await dbService.create(UserToken, { token, userId: find._id, tokenExpiredTime: expire });
 
-    return res.success({ data: { ...find._doc, token }, message: 'User login successfully' });
+    return res.success({ data: { ...find._doc, token: createToken }, message: 'User login successfully' });
   } catch (error) {
     return res.internalServerError({ message: error.message });
   }
@@ -73,9 +74,34 @@ export const login = async (req, res) => {
 export const logout = async (req, res) => {
   try {
     let updatedDocument = { isTokenExpired: true };
-    await dbService.updateOne(UserToken, { userId: req.user._id }, updatedDocument);
+    const _id = req.user.token._id;
+    await dbService.updateOne(UserToken, { _id }, updatedDocument);
     return res.success({ message: 'Logged Out Successfully' });
   } catch (error) {
     return res.internalServerError({ data: error.message });
   }
+};
+
+export const googleCallback = (req, res, next) => {
+  passport.authenticate('google', { failureRedirect: '/auth/google/error' }, async (error, user, info) => {
+    if (error) {
+      return res.internalServerError({ message: error.message });
+    }
+    if (user) {
+      try {
+        const token = await user.generateToken();
+
+        let expire = dayjs().add(process.env.TOKEN_EXPIRY, 'second').toISOString();
+
+        await dbService.create(UserToken, { token, userId: user._id, tokenExpiredTime: expire });
+        res.redirect('/home?token=' + token);
+      } catch (error) {
+        return res.internalServerError({ message: error.message });
+      }
+    }
+  })(req, res, next);
+};
+
+export const me = (req, res) => {
+  return res.success({ data: req.user });
 };
