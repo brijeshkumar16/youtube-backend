@@ -1,30 +1,31 @@
 {
-  "name": "youtube-backend",
-  "version": "1.0.0",
-  "description": "A youtube backend with NodeJS",
-  "main": "index.js",
-  "author": "Brijeshkumar Yadav",
-  "license": "MIT",
-  "type": "module",
-  "scripts": {
-    "start": "nodemon src/index.js"
-  },
-  "dependencies": {
-    "bcrypt": "^5.1.1",
-    "cors": "^2.8.5",
-    "dayjs": "^1.11.10",
-    "express": "^4.18.2",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.0.3",
-    "mongoose-aggregate-paginate-v2": "^1.0.6",
-    "multer": "^1.4.5-lts.1",
-    "passport": "0.5",
-    "passport-google-oauth20": "^2.0.0",
-    "passport-jwt": "^4.0.1"
-  },
-  "devDependencies": {
-    "dotenv": "^16.3.1",
-    "nodemon": "^3.0.2",
-    "prettier": "3.1.1"
-  }
+    "name": "youtube-backend",
+    "version": "1.0.0",
+    "description": "A youtube backend with NodeJS",
+    "main": "index.js",
+    "author": "Brijeshkumar Yadav",
+    "license": "MIT",
+    "type": "module",
+    "scripts": {
+        "start": "nodemon src/index.js",
+        "format": "prettier --write src/**/*.js"
+    },
+    "dependencies": {
+        "bcrypt": "^5.1.1",
+        "cors": "^2.8.5",
+        "dayjs": "^1.11.10",
+        "express": "^4.18.2",
+        "jsonwebtoken": "^9.0.2",
+        "mongoose": "^8.0.3",
+        "mongoose-aggregate-paginate-v2": "^1.0.6",
+        "multer": "^1.4.5-lts.1",
+        "passport": "0.5",
+        "passport-google-oauth20": "^2.0.0",
+        "passport-jwt": "^4.0.1"
+    },
+    "devDependencies": {
+        "dotenv": "^16.3.1",
+        "nodemon": "^3.0.2",
+        "prettier": "3.1.1"
+    }
 }

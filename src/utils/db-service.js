@@ -26,15 +26,15 @@ const count = (model, filter) => model.countDocuments(filter);
 const paginate = (model, filter, options) => model.paginate(filter, options);
 
 const dbService = {
-  create,
-  updateOne,
-  updateMany,
-  deleteOne,
-  deleteMany,
-  findOne,
-  findMany,
-  count,
-  paginate,
+    create,
+    updateOne,
+    updateMany,
+    deleteOne,
+    deleteMany,
+    findOne,
+    findMany,
+    count,
+    paginate,
 };
 
 export default dbService;

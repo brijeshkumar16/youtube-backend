@@ -1,8 +1,18 @@
 import { Router } from 'express';
 import passport from 'passport';
 
-import { changeCurrentPassword, currentUser, googleCallback, login, logout, register, updateUser } from '../controllers/user.controller.js';
 import auth from '../middlewares/auth.middlewares.js';
+import {
+    changeCurrentPassword,
+    currentUser,
+    getUserChannelProfile,
+    getWatchHistory,
+    googleCallback,
+    login,
+    logout,
+    register,
+    updateUser,
+} from '../controllers/user.controller.js';
 
 const userRoute = Router();
 
@@ -12,20 +22,25 @@ userRoute.post('/login', login);
 
 userRoute.get('/logout', auth, logout);
 
-userRoute.get('/current', auth, currentUser);
+userRoute.get('/current-user', auth, currentUser);
 
-userRoute.patch('/update', auth, updateUser);
+userRoute.patch('/update-user', auth, updateUser);
 
 userRoute.post('/change-password', auth, changeCurrentPassword);
 
+userRoute.get('/profile/:username', auth, getUserChannelProfile);
+
+userRoute.get('/watch-history', auth, getWatchHistory);
+
+// google login
 userRoute.get('/google/error', (req, res) => res.loginFailed({ message: 'Login Failed' }));
 
 userRoute.get(
-  '/google',
-  passport.authenticate('google', {
-    scope: ['profile', 'email'],
-    session: false,
-  })
+    '/google',
+    passport.authenticate('google', {
+        scope: ['profile', 'email'],
+        session: false,
+    })
 );
 
 userRoute.get('/google/callback', googleCallback);
