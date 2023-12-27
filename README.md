@@ -1,5 +1,17 @@
 # Youtube Backend with NodeJS
 
+### Installation
+
+```bash
+yarn
+```
+
+### Development Server
+
+```bash
+yarn start
+```
+
 ## Feature develop
 
 -   Auth Module
