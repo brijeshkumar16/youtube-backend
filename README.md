@@ -12,13 +12,13 @@ yarn
 yarn start
 ```
 
-## Feature develop
+### Feature develop
 
 -   Auth Module
 
-    -   User registration
+    -   User Registration
     -   User login
-    -   User login with google
+    -   User login with Google
     -   Current user
     -   Change password
     -   Update user profile
