@@ -1,16 +1,21 @@
+import mongoose from 'mongoose';
 import passport from 'passport';
 import dayjs from 'dayjs';
 
+import { changePasswordSchemaKeys, loginSchemaKeys, registerSchemaKeys } from '../utils/validation/user.validation.js';
+import { validateParamsWithJoi } from '../utils/validationRequest.js';
 import UserToken from '../models/user-token.model.js';
 import dbService from '../utils/db-service.js';
 import User from '../models/user.model.js';
-import mongoose from 'mongoose';
 
 export const register = async (req, res) => {
     try {
         const { username, email, fullName, avatar, coverImage, password } = req.body;
 
-        // Add validation of required field
+        let validateRequest = validateParamsWithJoi({ username, email, fullName, password }, registerSchemaKeys);
+        if (!validateRequest.isValid) {
+            return res.validationError({ message: `Invalid values in parameters, ${validateRequest.message}` });
+        }
 
         const alreadyExist = await dbService.findOne(User, { $or: [{ username }, { email }] });
 
@@ -60,7 +65,10 @@ export const login = async (req, res) => {
     try {
         const { username, email, password } = req.body;
 
-        // Add validation of required field
+        let validateRequest = validateParamsWithJoi({ username, email, password }, loginSchemaKeys);
+        if (!validateRequest.isValid) {
+            return res.validationError({ message: `Invalid values in parameters, ${validateRequest.message}` });
+        }
 
         const findUser = await dbService
             .findOne(User, { $or: [{ username }, { email }] })
@@ -126,7 +134,11 @@ export const currentUser = (req, res) => {
 
 export const changeCurrentPassword = async (req, res) => {
     const { oldPassword, newPassword } = req.body;
-    // Add validation of required field
+
+    let validateRequest = validateParamsWithJoi({ oldPassword, newPassword }, changePasswordSchemaKeys);
+    if (!validateRequest.isValid) {
+        return res.validationError({ message: `Invalid values in parameters, ${validateRequest.message}` });
+    }
 
     try {
         const user = await dbService.findOne(User, { _id: req.user._id });
@@ -149,7 +161,7 @@ export const changeCurrentPassword = async (req, res) => {
 
 export const updateUser = async (req, res) => {
     const { username, email, fullName, avatar, coverImage } = req.body;
-    // Add validation of required field
+
     try {
         const user = await dbService
             .updateOne(User, { _id: req.user._id }, { username, email, fullName, avatar, coverImage })
